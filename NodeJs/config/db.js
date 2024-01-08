@@ -1,0 +1,12 @@
+const mongoose = require("mongoose");
+
+const connection = mongoose
+  .createConnection("mongodb+srv://rahulshenoy:rahulshenoy@todolist.q1lxi63.mongodb.net/")
+  .on("open", () => {
+    console.log("MOndgoDb connected");
+  })
+  .on("error", () => {
+    console.log("MongoDb connection error");
+  });
+
+module.exports = connection;
