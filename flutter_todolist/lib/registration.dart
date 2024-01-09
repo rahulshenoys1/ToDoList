@@ -14,34 +14,32 @@ class Registration extends StatefulWidget {
 }
 
 class _RegistrationState extends State<Registration> {
-
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   bool _isNotValidate = false;
 
-  void registerUser() async{
-    if(emailController.text.isNotEmpty && passwordController.text.isNotEmpty){
-
+  void registerUser() async {
+    if (emailController.text.isNotEmpty && passwordController.text.isNotEmpty) {
       var regBody = {
-        "email":emailController.text,
-        "password":passwordController.text
+        "email": emailController.text,
+        "password": passwordController.text
       };
 
       var response = await http.post(Uri.parse(registration),
-      headers: {"Content-Type":"application/json"},
-      body: jsonEncode(regBody)
-      );
+          headers: {"Content-Type": "application/json"},
+          body: jsonEncode(regBody));
 
       var jsonResponse = jsonDecode(response.body);
 
       print(jsonResponse['status']);
 
-      if(jsonResponse['status']){
-        Navigator.push(context, MaterialPageRoute(builder: (context)=>SignInPage()));
-      }else{
+      if (jsonResponse['status']) {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => SignInPage()));
+      } else {
         print("SomeThing Went Wrong");
       }
-    }else{
+    } else {
       setState(() {
         _isNotValidate = true;
       });
@@ -57,12 +55,11 @@ class _RegistrationState extends State<Registration> {
           height: MediaQuery.of(context).size.height,
           decoration: BoxDecoration(
             gradient: LinearGradient(
-                colors: [const Color(0XFFF95A3B),const Color(0XFFF96713)],
+                colors: [const Color(0XFFF95A3B), const Color(0XFFF96713)],
                 begin: FractionalOffset.topLeft,
                 end: FractionalOffset.bottomCenter,
-                stops: [0.0,0.8],
-                tileMode: TileMode.mirror
-            ),
+                stops: [0.0, 0.8],
+                tileMode: TileMode.mirror),
           ),
           child: Center(
             child: SingleChildScrollView(
@@ -82,43 +79,57 @@ class _RegistrationState extends State<Registration> {
                         errorText: _isNotValidate ? "Enter Proper Info" : null,
                         hintText: "Email",
                         border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(10.0)))),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10.0)))),
                   ).p4().px24(),
                   TextField(
                     controller: passwordController,
                     keyboardType: TextInputType.text,
                     decoration: InputDecoration(
-                        suffixIcon: IconButton(icon: Icon(Icons.copy),onPressed: (){
-                          final data = ClipboardData(text: passwordController.text);
-                          Clipboard.setData(data);
-                        },),
-                        prefixIcon: IconButton(icon: Icon(Icons.password),onPressed: (){
-                          String passGen =  generatePassword();
-                          passwordController.text = passGen;
-                          setState(() {
-
-                          });
-                        },),
+                        suffixIcon: IconButton(
+                          icon: Icon(Icons.copy),
+                          onPressed: () {
+                            final data =
+                                ClipboardData(text: passwordController.text);
+                            Clipboard.setData(data);
+                          },
+                        ),
+                        prefixIcon: IconButton(
+                          icon: Icon(Icons.password),
+                          onPressed: () {
+                            String passGen = generatePassword();
+                            passwordController.text = passGen;
+                            setState(() {});
+                          },
+                        ),
                         filled: true,
                         fillColor: Colors.white,
                         errorStyle: TextStyle(color: Colors.white),
                         errorText: _isNotValidate ? "Enter Proper Info" : null,
                         hintText: "Password",
                         border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(10.0)))),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10.0)))),
                   ).p4().px24(),
                   HStack([
                     GestureDetector(
-                      onTap: ()=>{
-                        registerUser()
-                      },
-                        child: VxBox(child: "Register".text.white.makeCentered().p16()).green600.roundedLg.make().px16().py16(),
+                      onTap: () => {registerUser()},
+                      child: VxBox(
+                              child: "Register".text.white.makeCentered().p16())
+                          .green600
+                          .roundedLg
+                          .make()
+                          .px16()
+                          .py16(),
                     ),
                   ]),
                   GestureDetector(
-                    onTap: (){
+                    onTap: () {
                       print("Sign In");
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=>SignInPage()));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => SignInPage()));
                     },
                     child: HStack([
                       "Already Registered?".text.make(),

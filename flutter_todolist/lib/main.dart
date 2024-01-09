@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_todolist/dashboard.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter_todolist/loginPage.dart';
+import 'loginPage.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

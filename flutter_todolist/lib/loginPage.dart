@@ -6,7 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'applogo.dart';
 import 'package:http/http.dart' as http;
-import 'package:flutter_todolist/config.dart';
+import 'config.dart';
 
 class SignInPage extends StatefulWidget {
   @override

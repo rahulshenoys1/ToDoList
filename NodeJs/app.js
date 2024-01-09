@@ -1,11 +1,12 @@
 const express = require("express");
-const body_parser = require("body-parser");
-const userRouter = require("./routes/user.route");
-
+const bodyParser = require("body-parser");
+const UserRoute = require("./routes/user.route");
+const ToDoRoute = require("./routes/todo.route");
 const app = express();
 
-app.use(body_parser.json());
+app.use(bodyParser.json());
 
-app.use("/", userRouter);
+app.use("/", UserRoute);
+app.use("/", ToDoRoute);
 
 module.exports = app;
