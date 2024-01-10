@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:convert';
 import 'dart:math';
 import 'package:flutter/material.dart';
@@ -9,7 +11,10 @@ import 'package:http/http.dart' as http;
 import 'config.dart';
 
 class Registration extends StatefulWidget {
+  const Registration({super.key});
+
   @override
+  // ignore: library_private_types_in_public_api
   _RegistrationState createState() => _RegistrationState();
 }
 
@@ -19,23 +24,30 @@ class _RegistrationState extends State<Registration> {
   bool _isNotValidate = false;
 
   void registerUser() async {
+    print('entered registerUser');
     if (emailController.text.isNotEmpty && passwordController.text.isNotEmpty) {
+      print('Entered if statement ');
       var regBody = {
         "email": emailController.text,
         "password": passwordController.text
       };
+      print(regBody);
 
-      var response = await http.post(Uri.parse(registration),
-          headers: {"Content-Type": "application/json"},
-          body: jsonEncode(regBody));
+      var response = await http.post(
+        Uri.parse(registration),
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode(regBody),
+      );
+      print(response);
 
       var jsonResponse = jsonDecode(response.body);
 
       print(jsonResponse['status']);
 
       if (jsonResponse['status']) {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => SignInPage()));
+        // ignore: use_build_context_synchronously
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const SignInPage()));
       } else {
         print("SomeThing Went Wrong");
       }
@@ -53,9 +65,9 @@ class _RegistrationState extends State<Registration> {
         body: Container(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             gradient: LinearGradient(
-                colors: [const Color(0XFFF95A3B), const Color(0XFFF96713)],
+                colors: [Color(0XFFF95A3B), Color(0XFFF96713)],
                 begin: FractionalOffset.topLeft,
                 end: FractionalOffset.bottomCenter,
                 stops: [0.0, 0.8],
@@ -66,8 +78,8 @@ class _RegistrationState extends State<Registration> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  CommonLogo(),
-                  HeightBox(10),
+                  const CommonLogo(),
+                  const HeightBox(10),
                   "CREATE YOUR ACCOUNT".text.size(22).yellow100.make(),
                   TextField(
                     controller: emailController,
@@ -75,10 +87,10 @@ class _RegistrationState extends State<Registration> {
                     decoration: InputDecoration(
                         filled: true,
                         fillColor: Colors.white,
-                        errorStyle: TextStyle(color: Colors.white),
+                        errorStyle: const TextStyle(color: Colors.white),
                         errorText: _isNotValidate ? "Enter Proper Info" : null,
                         hintText: "Email",
-                        border: OutlineInputBorder(
+                        border: const OutlineInputBorder(
                             borderRadius:
                                 BorderRadius.all(Radius.circular(10.0)))),
                   ).p4().px24(),
@@ -87,7 +99,7 @@ class _RegistrationState extends State<Registration> {
                     keyboardType: TextInputType.text,
                     decoration: InputDecoration(
                         suffixIcon: IconButton(
-                          icon: Icon(Icons.copy),
+                          icon: const Icon(Icons.copy),
                           onPressed: () {
                             final data =
                                 ClipboardData(text: passwordController.text);
@@ -95,7 +107,7 @@ class _RegistrationState extends State<Registration> {
                           },
                         ),
                         prefixIcon: IconButton(
-                          icon: Icon(Icons.password),
+                          icon: const Icon(Icons.password),
                           onPressed: () {
                             String passGen = generatePassword();
                             passwordController.text = passGen;
@@ -104,10 +116,10 @@ class _RegistrationState extends State<Registration> {
                         ),
                         filled: true,
                         fillColor: Colors.white,
-                        errorStyle: TextStyle(color: Colors.white),
+                        errorStyle: const TextStyle(color: Colors.white),
                         errorText: _isNotValidate ? "Enter Proper Info" : null,
                         hintText: "Password",
-                        border: OutlineInputBorder(
+                        border: const OutlineInputBorder(
                             borderRadius:
                                 BorderRadius.all(Radius.circular(10.0)))),
                   ).p4().px24(),
@@ -129,7 +141,7 @@ class _RegistrationState extends State<Registration> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => SignInPage()));
+                              builder: (context) => const SignInPage()));
                     },
                     child: HStack([
                       "Already Registered?".text.make(),

@@ -1,6 +1,6 @@
-final url = 'http://192.168.2.105:3000/';
-final registration = url + "registration";
-final login = url + 'login';
-final addtodo = url + 'storeTodo';
-final getToDoList = url + 'getUserTodoList';
-final deleteTodo = url + 'deleteTodo';
+const url = 'http://192.168.2.105:3000/';
+const registration = "${url}registration";
+const login = '${url}login';
+const addtodo = '${url}storeTodo';
+const getToDoList = '${url}getUserTodoList';
+const deleteTodo = '${url}deleteTodo';
