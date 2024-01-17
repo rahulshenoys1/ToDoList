@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -8,8 +10,9 @@ import 'config.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 class Dashboard extends StatefulWidget {
+  // ignore: prefer_typing_uninitialized_variables
   final token;
-  const Dashboard({@required this.token, Key? key}) : super(key: key);
+  const Dashboard({@required this.token, super.key});
 
   @override
   State<Dashboard> createState() => _DashboardState();
@@ -17,12 +20,11 @@ class Dashboard extends StatefulWidget {
 
 class _DashboardState extends State<Dashboard> {
   late String userId;
-  TextEditingController _todoTitle = TextEditingController();
-  TextEditingController _todoDesc = TextEditingController();
+  final TextEditingController _todoTitle = TextEditingController();
+  final TextEditingController _todoDesc = TextEditingController();
   List? items;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     Map<String, dynamic> jwtDecodedToken = JwtDecoder.decode(widget.token);
 
@@ -35,7 +37,7 @@ class _DashboardState extends State<Dashboard> {
       var regBody = {
         "userId": userId,
         "title": _todoTitle.text,
-        "desc": _todoDesc.text
+        "description": _todoDesc.text
       };
 
       var response = await http.post(Uri.parse(addtodo),
@@ -49,6 +51,7 @@ class _DashboardState extends State<Dashboard> {
       if (jsonResponse['status']) {
         _todoDesc.clear();
         _todoTitle.clear();
+        // ignore: use_build_context_synchronously
         Navigator.pop(context);
         getTodoList(userId);
       } else {
@@ -57,6 +60,27 @@ class _DashboardState extends State<Dashboard> {
     }
   }
 
+  // void getTodoList(userId) async {
+  //   var url = Uri.parse('$getToDoList?userId=$userId');
+  //   print('Request URL: $url');
+
+  //   var response =
+  //       await http.get(url, headers: {"Content-Type": "application/json"});
+  //   print('Response status code: ${response.statusCode}');
+  //   print('Response body: ${response.body}');
+
+  //   if (response.statusCode == 200) {
+  //     var jsonResponse = jsonDecode(response.body);
+  //     print('Decoded JSON: $jsonResponse');
+  //     setState(() {
+  //       items = jsonResponse['success'];
+  //     });
+  //   } else {
+  //     // Handle error
+  //     print('Request failed with status: ${response.statusCode}');
+  //   }
+  // }
+
   void getTodoList(userId) async {
     var regBody = {"userId": userId};
 
@@ -64,10 +88,24 @@ class _DashboardState extends State<Dashboard> {
         headers: {"Content-Type": "application/json"},
         body: jsonEncode(regBody));
 
-    var jsonResponse = jsonDecode(response.body);
-    items = jsonResponse['success'];
+    print('Request URL: ${Uri.parse(getToDoList)}');
+    print('Request body: $regBody');
+    print('Response status code: ${response.statusCode}');
+    print('Response body: ${response.body}');
 
-    setState(() {});
+    if (response.statusCode == 200) {
+      var jsonResponse = jsonDecode(response.body);
+      print('Response JSON: $jsonResponse');
+
+      setState(() {
+        items = jsonResponse['success'];
+      });
+
+      print('Updated items using setState: $items');
+    } else {
+      // Handle error
+      print('Request failed with status: ${response.statusCode}');
+    }
   }
 
   void deleteItem(id) async {
@@ -91,18 +129,18 @@ class _DashboardState extends State<Dashboard> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            padding: EdgeInsets.only(
+            padding: const EdgeInsets.only(
                 top: 60.0, left: 30.0, right: 30.0, bottom: 30.0),
-            child: Column(
+            child: const Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 CircleAvatar(
+                  backgroundColor: Colors.white,
+                  radius: 30.0,
                   child: Icon(
                     Icons.list,
                     size: 30.0,
                   ),
-                  backgroundColor: Colors.white,
-                  radius: 30.0,
                 ),
                 SizedBox(height: 10.0),
                 Text(
@@ -119,7 +157,7 @@ class _DashboardState extends State<Dashboard> {
           ),
           Expanded(
             child: Container(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(20),
@@ -138,7 +176,7 @@ class _DashboardState extends State<Dashboard> {
                               dismissible: DismissiblePane(onDismissed: () {}),
                               children: [
                                 SlidableAction(
-                                  backgroundColor: Color(0xFFFE4A49),
+                                  backgroundColor: const Color(0xFFFE4A49),
                                   foregroundColor: Colors.white,
                                   icon: Icons.delete,
                                   label: 'Delete',
@@ -152,10 +190,11 @@ class _DashboardState extends State<Dashboard> {
                             child: Card(
                               borderOnForeground: false,
                               child: ListTile(
-                                leading: Icon(Icons.task),
+                                leading: const Icon(Icons.task),
                                 title: Text('${items![index]['title']}'),
-                                subtitle: Text('${items![index]['desc']}'),
-                                trailing: Icon(Icons.arrow_back),
+                                subtitle:
+                                    Text('${items![index]['description']}'),
+                                trailing: const Icon(Icons.arrow_back),
                               ),
                             ),
                           );
@@ -167,8 +206,8 @@ class _DashboardState extends State<Dashboard> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _displayTextInputDialog(context),
-        child: Icon(Icons.add),
         tooltip: 'Add-ToDo',
+        child: const Icon(Icons.add),
       ),
     );
   }
@@ -178,14 +217,14 @@ class _DashboardState extends State<Dashboard> {
         context: context,
         builder: (context) {
           return AlertDialog(
-              title: Text('Add To-Do'),
+              title: const Text('Add To-Do'),
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   TextField(
                     controller: _todoTitle,
                     keyboardType: TextInputType.text,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                         filled: true,
                         fillColor: Colors.white,
                         hintText: "Title",
@@ -196,7 +235,7 @@ class _DashboardState extends State<Dashboard> {
                   TextField(
                     controller: _todoDesc,
                     keyboardType: TextInputType.text,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                         filled: true,
                         fillColor: Colors.white,
                         hintText: "Description",
@@ -208,7 +247,7 @@ class _DashboardState extends State<Dashboard> {
                       onPressed: () {
                         addTodo();
                       },
-                      child: Text("Add"))
+                      child: const Text("Add"))
                 ],
               ));
         });

@@ -8,6 +8,7 @@ const toDoSchema = new Schema(
     userId: {
       type: Schema.Types.ObjectId,
       ref: UserModel.modelName,
+      required: true,
     },
     title: {
       type: String,

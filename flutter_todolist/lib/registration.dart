@@ -33,23 +33,32 @@ class _RegistrationState extends State<Registration> {
       };
       print(regBody);
 
-      var response = await http.post(
-        Uri.parse(registration),
-        headers: {"Content-Type": "application/json"},
-        body: jsonEncode(regBody),
-      );
-      print(response);
+      try {
+        var response = await http.post(
+          Uri.parse(registration),
+          headers: {"Content-Type": "application/json"},
+          body: jsonEncode(regBody),
+        );
 
-      var jsonResponse = jsonDecode(response.body);
+        print('Response status code: ${response.statusCode}');
+        print('Response body: ${response.body}');
 
-      print(jsonResponse['status']);
+        var jsonResponse = jsonDecode(response.body);
 
-      if (jsonResponse['status']) {
-        // ignore: use_build_context_synchronously
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const SignInPage()));
-      } else {
-        print("SomeThing Went Wrong");
+        print(jsonResponse['status']);
+
+        if (jsonResponse['status']) {
+          // ignore: use_build_context_synchronously
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const SignInPage()),
+          );
+        } else {
+          print("Something Went Wrong");
+        }
+      } catch (error) {
+        // Handle HTTP request error
+        print('Error during HTTP request: $error');
       }
     } else {
       setState(() {

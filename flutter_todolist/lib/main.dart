@@ -31,6 +31,6 @@ class MyApp extends StatelessWidget {
         ),
         home: (token != null && JwtDecoder.isExpired(token) == false)
             ? Dashboard(token: token)
-            : SignInPage());
+            : const SignInPage());
   }
 }

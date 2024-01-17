@@ -1,10 +1,16 @@
 const { deleteToDo } = require("../controller/todo.controller");
-const ToDoModel = require("../models/todo.model");
+const ToDoModel = require("../model/todo.model");
 
 class ToDoService {
   static async createToDo(userId, title, description) {
     const createToDo = new ToDoModel({ userId, title, description });
     return await createToDo.save();
+  }
+
+  //new code
+  static async getUserToDoListAll() {
+    const todoList = await ToDoModel.find();
+    return todoList;
   }
 
   static async getUserToDoList(userId) {

@@ -5,7 +5,7 @@ const connection = mongoose
     "mongodb+srv://rahulshenoy:rahulshenoy@todolist.q1lxi63.mongodb.net/newToDo"
   )
   .on("open", () => {
-    console.log("MOndgoDb connected");
+    console.log("MondgoDb connected");
   })
   .on("error", () => {
     console.log("MongoDb connection error");
