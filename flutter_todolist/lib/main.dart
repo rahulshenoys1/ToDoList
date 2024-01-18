@@ -2,14 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_todolist/dashboard.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'loginPage.dart';
+import 'page/loginPage.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  runApp(MyApp(
-    token: prefs.getString('token'),
-  ));
+  runApp(
+    MyApp(
+      token: prefs.getString('token'),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -29,7 +31,8 @@ class MyApp extends StatelessWidget {
           primaryColor: Colors.black,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: (token != null && JwtDecoder.isExpired(token) == false)
+        // home: (token != null && JwtDecoder.isExpired(token) == false)
+        home: (token == null && JwtDecoder.isExpired(token) == true)
             ? Dashboard(token: token)
             : const SignInPage());
   }

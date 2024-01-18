@@ -20,6 +20,7 @@ class ToDoService {
 
   static async deleteToDo(id) {
     const deleted = await ToDoModel.findByIdAndDelete({ _id: id });
+    console.log("to do service:", deleted);
     return deleted;
   }
 }

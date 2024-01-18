@@ -1,7 +1,6 @@
 const UserServices = require("../services/user.services");
 exports.register = async (req, res, next) => {
   try {
-    console.log("---req body---", req.body);
     const { email, password } = req.body;
     const duplicate = await UserServices.getUserByEmail(email);
     if (duplicate) {

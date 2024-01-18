@@ -1,12 +1,14 @@
+// ignore_for_file: avoid_print
+
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_todolist/dashboard.dart';
-import 'package:flutter_todolist/registration.dart';
+import 'package:flutter_todolist/page/registration.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:velocity_x/velocity_x.dart';
-import 'applogo.dart';
+import '../applogo.dart';
 import 'package:http/http.dart' as http;
-import 'config.dart';
+import '../constants/config.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
@@ -17,6 +19,7 @@ class SignInPage extends StatefulWidget {
 }
 
 class _SignInPageState extends State<SignInPage> {
+  bool _obscureText = true;
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   final bool _isNotValidate = false;
@@ -47,6 +50,7 @@ class _SignInPageState extends State<SignInPage> {
       if (jsonResponse['status']) {
         var myToken = jsonResponse['token'];
         prefs.setString('token', myToken);
+        // ignore: use_build_context_synchronously
         Navigator.push(context,
             MaterialPageRoute(builder: (context) => Dashboard(token: myToken)));
       } else {
@@ -92,15 +96,30 @@ class _SignInPageState extends State<SignInPage> {
                   ).p4().px24(),
                   TextField(
                     controller: passwordController,
+                    obscureText: _obscureText,
                     keyboardType: TextInputType.text,
                     decoration: InputDecoration(
-                        filled: true,
-                        fillColor: Colors.white,
-                        hintText: "Password",
-                        errorText: _isNotValidate ? "Enter Proper Info" : null,
-                        border: const OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(10.0)))),
+                      filled: true,
+                      fillColor: Colors.white,
+                      hintText: "Password",
+                      errorText: _isNotValidate ? "Enter Proper Info" : null,
+                      border: const OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                      ),
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _obscureText
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                          color: Colors.grey,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _obscureText = !_obscureText;
+                          });
+                        },
+                      ),
+                    ),
                   ).p4().px24(),
                   GestureDetector(
                     onTap: () {
@@ -121,7 +140,7 @@ class _SignInPageState extends State<SignInPage> {
         bottomNavigationBar: GestureDetector(
           onTap: () {
             Navigator.push(context,
-                MaterialPageRoute(builder: (context) => Registration()));
+                MaterialPageRoute(builder: (context) => const Registration()));
           },
           child: Container(
               height: 25,

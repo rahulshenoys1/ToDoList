@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:http/http.dart' as http;
-import 'config.dart';
+import 'constants/config.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 class Dashboard extends StatefulWidget {
@@ -108,16 +108,25 @@ class _DashboardState extends State<Dashboard> {
     }
   }
 
-  void deleteItem(id) async {
-    var regBody = {"id": id};
+  void deletetoDo(id) async {
+    try {
+      var regBody = {"id": id};
 
-    var response = await http.post(Uri.parse(deleteTodo),
-        headers: {"Content-Type": "application/json"},
-        body: jsonEncode(regBody));
+      var response = await http.post(Uri.parse(deleteTodo),
+          headers: {"Content-Type": "application/json"},
+          body: jsonEncode(regBody));
 
-    var jsonResponse = jsonDecode(response.body);
-    if (jsonResponse['status']) {
-      getTodoList(userId);
+      print('Delete Request URL: ${Uri.parse(deleteTodo)}');
+      print('Delete Request body: $regBody');
+      print('Delete Response status code: ${response.statusCode}');
+      print('Delete Response body: ${response.body}');
+
+      var jsonResponse = jsonDecode(response.body);
+      if (jsonResponse['status']) {
+        getTodoList(userId);
+      }
+    } catch (error) {
+      print('Error in deletetoDo: $error');
     }
   }
 
@@ -158,10 +167,12 @@ class _DashboardState extends State<Dashboard> {
           Expanded(
             child: Container(
               decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20),
-                      topRight: Radius.circular(20))),
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(20),
+                  topRight: Radius.circular(20),
+                ),
+              ),
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: items == null
@@ -173,7 +184,20 @@ class _DashboardState extends State<Dashboard> {
                             key: const ValueKey(0),
                             endActionPane: ActionPane(
                               motion: const ScrollMotion(),
-                              dismissible: DismissiblePane(onDismissed: () {}),
+                              dismissible: DismissiblePane(
+                                onDismissed: () {
+                                  print(
+                                      'Removing item at index $index from the list...');
+                                  setState(() {
+                                    items!.removeAt(index);
+                                  });
+
+                                  print(
+                                      'Deleting ToDo with ID: ${items![index]['_id']}');
+                                  deletetoDo('${items![index]['_id']}');
+                                  print('Item removed. Updated items: $items');
+                                },
+                              ),
                               children: [
                                 SlidableAction(
                                   backgroundColor: const Color(0xFFFE4A49),
@@ -181,8 +205,10 @@ class _DashboardState extends State<Dashboard> {
                                   icon: Icons.delete,
                                   label: 'Delete',
                                   onPressed: (BuildContext context) {
-                                    print('${items![index]['_id']}');
-                                    deleteItem('${items![index]['_id']}');
+                                    // No need to have any code here since the logic is moved to onDismissed
+                                    // print(
+                                    //     'Deleting ToDo with ID: ${items![index]['_id']}');
+                                    // deletetoDo('${items![index]['_id']}');
                                   },
                                 ),
                               ],
@@ -198,7 +224,8 @@ class _DashboardState extends State<Dashboard> {
                               ),
                             ),
                           );
-                        }),
+                        },
+                      ),
               ),
             ),
           )
